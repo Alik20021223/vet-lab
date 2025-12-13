@@ -72,3 +72,10 @@ prisma/*.db-journal
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# Frontend - только dist/ в Git, остальное игнорируем
+frontend/*
+!frontend/dist/
+!frontend/dist/**
+!frontend/Dockerfile.production
+!frontend/nginx.conf
