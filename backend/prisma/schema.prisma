@@ -1,0 +1,280 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  super_admin
+  admin
+  editor
+  user
+}
+
+enum CatalogCategory {
+  vaccines
+  medicines
+  disinfection
+  feed_additives
+  equipment
+  antibiotics
+}
+
+enum CatalogStatus {
+  active
+  draft
+  archived
+}
+
+enum ServiceStatus {
+  active
+  draft
+}
+
+enum NewsStatus {
+  published
+  draft
+  scheduled
+}
+
+enum JobType {
+  full_time
+  part_time
+  contract
+  internship
+}
+
+enum JobStatus {
+  active
+  draft
+  closed
+  expired
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  avatar    String?
+  role      UserRole @default(user)
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  createdCatalogItems CatalogItem[]
+  createdNews         News[]
+  activities         Activity[]
+}
+
+model Brand {
+  id          String        @id @default(cuid())
+  name        String
+  logo        String?
+  description String?
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  products    CatalogItem[]
+}
+
+model CatalogItem {
+  id               String           @id @default(cuid())
+  title            String
+  titleEn          String?
+  description      String
+  descriptionEn    String?
+  fullDescription  String?          @db.Text
+  fullDescriptionEn String?         @db.Text
+  applicationMethod String?         @db.Text
+  applicationMethodEn String?       @db.Text
+  category         CatalogCategory
+  brandId          String?
+  brand            Brand?           @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  image            String?
+  documents        String[]         // Array of URLs
+  status           CatalogStatus    @default(draft)
+  sortOrder        Int              @default(0)
+  createdById      String?
+  createdBy        User?            @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model Service {
+  id              String        @id @default(cuid())
+  title           String
+  titleEn         String?
+  shortDescription String
+  shortDescriptionEn String?
+  fullDescription String        @db.Text
+  fullDescriptionEn String?     @db.Text
+  image           String?
+  icon            String?
+  status          ServiceStatus  @default(draft)
+  sortOrder       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model News {
+  id          String      @id @default(cuid())
+  title       String
+  titleEn     String?
+  excerpt     String
+  excerptEn   String?
+  content     String      @db.Text
+  contentEn   String?     @db.Text
+  coverImage  String?
+  publishedAt DateTime     // Date when news should be published
+  status      NewsStatus  @default(draft)
+  authorId    String?
+  author      User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  nameEn    String?
+  position  String
+  positionEn String?
+  photo     String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Partner {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String?
+  url       String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Gallery {
+  id          String   @id @default(cuid())
+  image       String
+  category    String?
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Page {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  content       String   @db.Text
+  seo           Json?    // { metaTitle, metaDescription, metaKeywords }
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model ContactInfo {
+  id              String   @id @default(cuid())
+  phone           String
+  email           String
+  address         String
+  addressEn       String?
+  mapLat          Float
+  mapLng          Float
+  workingHours    String?
+  workingHoursEn  String?
+  requisites      Json?    // { companyName, inn, kpp, bankName, bankAccount }
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Contact {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  subject      String?
+  message      String
+  contextType  String?  // "product", "service", "general"
+  contextId    String?  // ID продукта или услуги
+  contextTitle String?  // Название продукта/услуги для удобства
+  status       String   @default("new") // "new", "read", "replied"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Career {
+  id              String    @id @default(cuid())
+  title           String
+  titleEn         String?
+  description     String
+  descriptionEn   String?
+  fullDescription String    @db.Text
+  fullDescriptionEn String? @db.Text
+  location        String
+  locationEn      String?
+  type            JobType
+  department      String?
+  departmentEn    String?
+  requirements    String[]  // Array of strings
+  requirementsEn  String[]  @default([]) // Array of strings in English
+  responsibilities String[] // Array of strings
+  responsibilitiesEn String[] @default([]) // Array of strings in English
+  benefits        String[]  // Array of strings
+  benefitsEn      String[]  @default([]) // Array of strings in English
+  salary          Json?     // { min: number, max: number, currency: string }
+  status          JobStatus @default(draft)
+  sortOrder       Int       @default(0)
+  expiresAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+enum ActivityAction {
+  create
+  update
+  delete
+}
+
+enum ActivityEntity {
+  catalog
+  service
+  news
+  team
+  partner
+  gallery
+  brand
+  career
+  contact
+  page
+}
+
+model Activity {
+  id         String         @id @default(cuid())
+  action     ActivityAction
+  entity     ActivityEntity
+  entityId   String
+  entityName String?
+  userId     String
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timestamp  DateTime       @default(now())
+  details    String
+  metadata   Json?          // { ip, userAgent, changes, etc. }
+  createdAt  DateTime       @default(now())
+  
+  @@index([timestamp])
+  @@index([entity])
+  @@index([action])
+  @@index([userId])
+  @@index([entity, timestamp])
+}

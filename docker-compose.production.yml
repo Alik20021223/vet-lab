@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: vetlab-db
+    environment:
+      - POSTGRES_USER=vetlab_user
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme123}
+      - POSTGRES_DB=vetlab_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - vetlab-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vetlab_user -d vetlab_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend (Fastify API)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile
+    container_name: vetlab-backend
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://vetlab_user:${DB_PASSWORD:-changeme123}@db:5432/vetlab_db?schema=public
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production-min-32-chars}
+      - REFRESH_SECRET=${REFRESH_SECRET:-change-me-in-production-min-32-chars}
+      - JWT_EXPIRES_IN=1h
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
+      - UPLOAD_MAX_SIZE=10485760
+      - UPLOAD_DIR=./uploads
+    volumes:
+      - ./backend/uploads:/app/uploads
+    ports:
+      - "3000:3000"
+    networks:
+      - vetlab-network
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend (React Production Build + Nginx)
+  # Фронтенд собирается через 'npm run build' и отдаётся через Nginx
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-/api}
+    container_name: vetlab-frontend
+    ports:
+      - "8080:80"  # Порт 8080 на хосте -> порт 80 в контейнере (Nginx)
+    networks:
+      - vetlab-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  vetlab-network:
+    driver: bridge

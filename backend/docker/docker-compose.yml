@@ -1,0 +1,49 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://vetlab_user:vetlab_pass@db:5432/vetlab_db?schema=public
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - REFRESH_SECRET=${REFRESH_SECRET:-change-me-in-production}
+      - JWT_EXPIRES_IN=1h
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
+      - UPLOAD_MAX_SIZE=10485760
+      - UPLOAD_DIR=./uploads
+    volumes:
+      - ../uploads:/app/uploads
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=vetlab_user
+      - POSTGRES_PASSWORD=vetlab_pass
+      - POSTGRES_DB=vetlab_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../uploads:/usr/share/nginx/html/static:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
