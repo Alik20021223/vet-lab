@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { resolveImageUrlsInData } from '../utils/url.js';
 const prisma = new PrismaClient();
 
 export default async function (app) {
@@ -23,7 +24,7 @@ export default async function (app) {
         prisma.gallery.count({ where }),
       ]);
 
-      return {
+      const responseData = {
         data: data.map(item => ({
           id: item.id,
           image: item.image,
@@ -38,6 +39,8 @@ export default async function (app) {
           totalPages: Math.ceil(total / limit),
         },
       };
+      
+      return resolveImageUrlsInData(responseData);
     } catch (err) {
       return reply.code(500).send({ error: { message: err.message } });
     }

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { resolveImageUrlsInData } from '../utils/url.js';
 const prisma = new PrismaClient();
 
 export default async function (app) {
@@ -9,7 +10,7 @@ export default async function (app) {
         orderBy: { sortOrder: 'asc' },
       });
 
-      return {
+      const responseData = {
         data: brands.map(brand => ({
           id: brand.id,
           name: brand.name,
@@ -18,6 +19,8 @@ export default async function (app) {
           sortOrder: brand.sortOrder,
         })),
       };
+      
+      return resolveImageUrlsInData(responseData);
     } catch (err) {
       return reply.code(500).send({ error: { message: err.message } });
     }
@@ -40,7 +43,7 @@ export default async function (app) {
         where: { brandId: brand.id, status: 'active' },
       });
 
-      return {
+      const responseData = {
         id: brand.id,
         name: brand.name,
         logo: brand.logo,
@@ -48,6 +51,8 @@ export default async function (app) {
         productsCount,
         sortOrder: brand.sortOrder,
       };
+      
+      return resolveImageUrlsInData(responseData);
     } catch (err) {
       return reply.code(500).send({ error: { message: err.message } });
     }

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { deleteFile } from '../../../utils/file.js';
+import { resolveImageUrlsInData } from '../../../utils/url.js';
 const prisma = new PrismaClient();
 
 export async function getAll(skip, limit, filters = {}) {
@@ -24,16 +25,18 @@ export async function getAll(skip, limit, filters = {}) {
     }),
     prisma.news.count({ where }),
   ]);
-  return { data, total };
+  return resolveImageUrlsInData({ data, total });
 }
 
 export async function getById(id) {
-  return prisma.news.findUnique({
+  const news = await prisma.news.findUnique({
     where: { id },
     include: {
       author: { select: { id: true, name: true } },
     },
   });
+  
+  return resolveImageUrlsInData(news);
 }
 
 export async function create(data) {

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { formatCategory, parseCategory } from '../utils/category.js';
+import { resolveImageUrlsInData } from '../utils/url.js';
 const prisma = new PrismaClient();
 
 export default async function (app) {
@@ -38,7 +39,7 @@ export default async function (app) {
         prisma.catalogItem.count({ where }),
       ]);
 
-      return {
+      const responseData = {
         data: data.map(item => ({
           id: item.id,
           title: item.title,
@@ -70,6 +71,8 @@ export default async function (app) {
           totalPages: Math.ceil(total / limit),
         },
       };
+      
+      return resolveImageUrlsInData(responseData);
     } catch (err) {
       return reply.code(500).send({ error: { message: err.message } });
     }
@@ -94,7 +97,7 @@ export default async function (app) {
         });
       }
 
-      return {
+      const responseData = {
         id: item.id,
         title: item.title,
         titleEn: item.titleEn,
@@ -118,6 +121,8 @@ export default async function (app) {
         createdAt: item.createdAt.toISOString(),
         updatedAt: item.updatedAt.toISOString(),
       };
+      
+      return resolveImageUrlsInData(responseData);
     } catch (err) {
       return reply.code(500).send({ error: { message: err.message } });
     }

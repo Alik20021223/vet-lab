@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { resolveImageUrlsInData } from '../utils/url.js';
 const prisma = new PrismaClient();
 
 export default async function (app) {
@@ -9,7 +10,7 @@ export default async function (app) {
         orderBy: { sortOrder: 'asc' },
       });
 
-      return {
+      const responseData = {
         data: partners.map(partner => ({
           id: partner.id,
           name: partner.name,
@@ -18,6 +19,8 @@ export default async function (app) {
           sortOrder: partner.sortOrder,
         })),
       };
+      
+      return resolveImageUrlsInData(responseData);
     } catch (err) {
       return reply.code(500).send({ error: { message: err.message } });
     }

@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { formatCategory, parseCategory } from '../../../utils/category.js';
 import { deleteFile, deleteFiles } from '../../../utils/file.js';
+import { resolveImageUrlsInData } from '../../../utils/url.js';
 const prisma = new PrismaClient();
 
 export async function getAll(skip, limit, filters = {}) {
@@ -32,7 +33,7 @@ export async function getAll(skip, limit, filters = {}) {
     prisma.catalogItem.count({ where }),
   ]);
 
-  return {
+  const result = {
     data: data.map(item => ({
       id: item.id,
       title: item.title,
@@ -55,6 +56,8 @@ export async function getAll(skip, limit, filters = {}) {
     })),
     total,
   };
+  
+  return resolveImageUrlsInData(result);
 }
 
 export async function getById(id) {
@@ -72,7 +75,7 @@ export async function getById(id) {
   });
   
   if (item) {
-    return {
+    const result = {
       ...item,
       category: formatCategory(item.category),
       brand: item.brand ? {
@@ -82,6 +85,8 @@ export async function getById(id) {
       } : null,
       documents: item.documents || [],
     };
+    
+    return resolveImageUrlsInData(result);
   }
   
   return item;

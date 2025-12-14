@@ -29,13 +29,14 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - DATABASE_URL=postgresql://vetlab_user:${DB_PASSWORD:-changeme123}@db:5432/vetlab_db?schema=public
+      - DATABASE_URL=postgresql://vetlab_user:${DB_PASSWORD:-changeme123}@db:5432/vetlab_db?schema=public&sslmode=disable
       - JWT_SECRET=${JWT_SECRET:-change-me-in-production-min-32-chars}
       - REFRESH_SECRET=${REFRESH_SECRET:-change-me-in-production-min-32-chars}
       - JWT_EXPIRES_IN=1h
       - CORS_ORIGIN=${CORS_ORIGIN:-*}
       - UPLOAD_MAX_SIZE=10485760
       - UPLOAD_DIR=./uploads
+      - PUBLIC_URL=${PUBLIC_URL:-}
     volumes:
       - ./backend/uploads:/app/uploads
     ports:
@@ -54,13 +55,12 @@ services:
       start_period: 40s
 
   # Frontend (React Production Build + Nginx)
-  # Фронтенд собирается через 'npm run build' и отдаётся через Nginx
+  # Фронтенд должен быть собран локально (npm run build) перед деплоем
+  # Этот Dockerfile просто копирует готовый dist/ в Nginx
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - VITE_API_URL=${VITE_API_URL:-/api}
+      dockerfile: Dockerfile.production
     container_name: vetlab-frontend
     ports:
       - "8080:80"  # Порт 8080 на хосте -> порт 80 в контейнере (Nginx)

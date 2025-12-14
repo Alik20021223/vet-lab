@@ -1,13 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import { deleteFile } from '../../../utils/file.js';
+import { resolveImageUrlsInData } from '../../../utils/url.js';
 const prisma = new PrismaClient();
 
 export async function getAll() {
-  return prisma.teamMember.findMany({ orderBy: { sortOrder: 'asc' } });
+  const members = await prisma.teamMember.findMany({ orderBy: { sortOrder: 'asc' } });
+  return resolveImageUrlsInData(members);
 }
 
 export async function getById(id) {
-  return prisma.teamMember.findUnique({ where: { id } });
+  const member = await prisma.teamMember.findUnique({ where: { id } });
+  return resolveImageUrlsInData(member);
 }
 
 export async function create(data) {
