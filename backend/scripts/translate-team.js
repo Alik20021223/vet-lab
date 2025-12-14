@@ -96,3 +96,4 @@ async function translateTeam() {
 }
 
 translateTeam();
+
