@@ -6,10 +6,21 @@ export const updateSchema = {
       phone: { type: 'string' },
       email: { type: 'string', format: 'email' },
       address: { type: 'string' },
-      mapLat: { type: 'number', minimum: -90, maximum: 90 },
-      mapLng: { type: 'number', minimum: -180, maximum: 180 },
-      workingHours: { type: 'string' },
-      requisites: { type: 'object' },
+      addressEn: { type: ['string', 'null'] },
+      mapLat: { 
+        anyOf: [
+          { type: 'number' },
+          { type: 'string' }
+        ]
+      },
+      mapLng: { 
+        anyOf: [
+          { type: 'number' },
+          { type: 'string' }
+        ]
+      },
+      workingHours: { type: ['string', 'null'] },
+      workingHoursEn: { type: ['string', 'null'] },
     },
   },
 };

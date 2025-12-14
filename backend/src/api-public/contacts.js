@@ -27,7 +27,6 @@ export default async function (app) {
         mapLng: contactInfo.mapLng,
         workingHours: contactInfo.workingHours,
         workingHoursEn: contactInfo.workingHoursEn,
-        requisites: contactInfo.requisites || {},
       };
     } catch (err) {
       return reply.code(500).send({ error: { message: err.message } });

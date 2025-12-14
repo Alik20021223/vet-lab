@@ -120,3 +120,5 @@ async function translateCatalog() {
 
 translateCatalog();
 
+
+

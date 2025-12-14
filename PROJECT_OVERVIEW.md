@@ -242,3 +242,5 @@ npm run dev        # Dev server (localhost:3000)
 
 **Вопросы?** См. `DEPLOYMENT_GUIDE.md` для подробных инструкций.
 
+
+
