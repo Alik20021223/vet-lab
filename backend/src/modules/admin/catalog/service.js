@@ -37,9 +37,13 @@ export async function getAll(skip, limit, filters = {}) {
     data: data.map(item => ({
       id: item.id,
       title: item.title,
+      titleEn: item.titleEn,
       description: item.description,
+      descriptionEn: item.descriptionEn,
       fullDescription: item.fullDescription,
+      fullDescriptionEn: item.fullDescriptionEn,
       applicationMethod: item.applicationMethod,
+      applicationMethodEn: item.applicationMethodEn,
       category: item.category === 'feed_additives' ? 'feed-additives' : item.category,
       brandId: item.brandId,
       brand: item.brand ? {
