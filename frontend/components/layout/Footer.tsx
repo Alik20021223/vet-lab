@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin, Send } from 'lucide-react';
 import { NAVIGATION } from '../../shared/constants/navigation';
 import { BRAND } from '../../shared/constants/brand';
 import { useServices } from '../../shared/hooks/useServices';
@@ -112,33 +112,50 @@ export function Footer() {
             </ul>
 
             <div className="flex gap-3 mt-4">
-              <a
-                href={BRAND.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
-                style={{ backgroundColor: BRAND.colors.accent }}
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href={BRAND.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
-                style={{ backgroundColor: BRAND.colors.accent }}
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href={BRAND.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
-                style={{ backgroundColor: BRAND.colors.accent }}
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
+              {contacts?.telegram && (
+                <a
+                  href={contacts.telegram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: BRAND.colors.accent }}
+                >
+                  <Send className="w-5 h-5" />
+                </a>
+              )}
+              {contacts?.facebook && (
+                <a
+                  href={contacts.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: BRAND.colors.accent }}
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+              )}
+              {contacts?.instagram && (
+                <a
+                  href={contacts.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: BRAND.colors.accent }}
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+              )}
+              {BRAND.social.linkedin && !contacts?.telegram && !contacts?.facebook && !contacts?.instagram && (
+                <a
+                  href={BRAND.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: BRAND.colors.accent }}
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              )}
             </div>
           </div>
         </div>

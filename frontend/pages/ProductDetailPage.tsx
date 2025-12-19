@@ -165,7 +165,7 @@ export function ProductDetailPage() {
         {/* Product Info */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           {/* Image */}
-          <div className="rounded-2xl overflow-hidden bg-gray-50">
+          <div className="rounded-2xl overflow-hidden bg-white">
             {productData.image && (
               <ImageWithFallback
                 src={productData.image}
@@ -195,7 +195,7 @@ export function ProductDetailPage() {
               <p className="text-gray-600 text-lg">{description}</p>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-6">
+            <div className="bg-white rounded-xl p-6 border border-gray-100">
               <div className="text-sm text-gray-600 mb-2">{t('productDetail.category')}</div>
               <div className="text-lg">{categoryName}</div>
             </div>
@@ -290,7 +290,7 @@ export function ProductDetailPage() {
                       to={`/catalog/${item.id}`}
                       className="block h-full bg-white rounded-2xl overflow-hidden border border-gray-200 transition-all group hover:shadow-lg flex flex-col"
                     >
-                      <div className="aspect-4/3 overflow-hidden bg-gray-50 flex-shrink-0">
+                      <div className="aspect-4/3 overflow-hidden bg-white flex-shrink-0">
                         {item.image && (
                           <ImageWithFallback
                             src={item.image}

@@ -15,7 +15,6 @@
 **Translated Sections:**
 - Header navigation
 - Hero section
-- About section
 - Services section
 - News section
 - Team section
@@ -53,12 +52,6 @@ function Component() {
 - Responsive typography: text-2xl → text-4xl → text-5xl
 - Hidden navigation arrows on mobile
 - Stacked buttons on small screens
-
-**About Section:**
-- Mobile-first stacked layout
-- Reordered content for better UX
-- Responsive image heights: 300px → 400px → 500px
-- Adaptive spacing
 
 **Contact Form:**
 - Full-width inputs on mobile
@@ -126,7 +119,6 @@ xl:  1280px  /* Desktops */
 /components/layout/Header.tsx        # Mobile menu + translations
 /components/layout/Layout.tsx        # Responsive padding
 /components/sections/HeroSection.tsx # Responsive + translations
-/components/sections/AboutSection.tsx # Responsive + translations
 /components/sections/ServicesSection.tsx # Responsive + translations
 /components/sections/ContactFormSection.tsx # Responsive + translations
 ```

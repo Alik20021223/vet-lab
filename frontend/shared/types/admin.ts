@@ -182,6 +182,17 @@ export interface AdminGalleryItem {
   updatedAt: string;
 }
 
+export interface HeroSlide {
+  id: string;
+  image: string;
+  title: string;
+  titleEn?: string;
+  sortOrder: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ContactInfo {
   phone: string;
   email: string;
@@ -191,6 +202,9 @@ export interface ContactInfo {
   mapLng: number;
   workingHours?: string | null;
   workingHoursEn?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  telegram?: string | null;
 }
 
 export interface StaticPage {

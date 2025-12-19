@@ -57,7 +57,7 @@ export function CareerPage() {
         </div>
       </section>
 
-      <section className="py-4 bg-gray-50">
+      <section className="py-4 bg-white">
         <div className="container mx-auto px-4">
           <Breadcrumbs items={[{ label: t('nav.career') }]} />
         </div>
@@ -68,21 +68,12 @@ export function CareerPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
             <div>
               <h2 className="mb-6">{t('career.whyUsTitle')}</h2>
-              <ul className="space-y-4">
-                {[
-                  t('career.benefit1'),
-                  t('career.benefit2'),
-                  t('career.benefit3'),
-                  t('career.benefit4'),
-                  t('career.benefit5'),
-                  t('career.benefit6'),
-                ].map((item, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: BRAND.colors.accent }} />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+              <div className="space-y-4 text-gray-700 leading-relaxed">
+                <p>{t('career.whyUsText1')}</p>
+                <p>{t('career.whyUsText2')}</p>
+                <p>{t('career.whyUsText3')}</p>
+                <p className="font-semibold" style={{ color: BRAND.colors.primary }}>{t('career.whyUsText4')}</p>
+              </div>
             </div>
 
             <div className="relative">

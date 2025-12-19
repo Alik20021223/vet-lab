@@ -48,7 +48,7 @@ export function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-4 bg-gray-50">
+      <section className="py-4 bg-white">
         <div className="container mx-auto px-4">
           <Breadcrumbs items={[{ label: t('nav.services') }]} />
         </div>
@@ -113,7 +113,7 @@ export function ServicesPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gray-50">
+      <section id="pricing" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="mb-4">{t('servicesPage.pricingTitle')}</h2>

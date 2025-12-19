@@ -41,7 +41,7 @@ export function ServicesSection() {
   }
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
+    <section className="py-12 md:py-16 lg:py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 md:mb-12">
           <h2 className="mb-3 md:mb-4">{t('services.title')}</h2>

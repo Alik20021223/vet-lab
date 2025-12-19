@@ -14,6 +14,7 @@ export const BRAND = {
   social: {
     facebook: 'https://facebook.com/vetlab',
     instagram: 'https://instagram.com/vetlab',
+    telegram: 'https://t.me/vetlab',
     linkedin: 'https://linkedin.com/company/vetlab',
   },
 } as const;

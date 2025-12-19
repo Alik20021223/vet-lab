@@ -1,6 +1,6 @@
 import { HeroSection } from '../components/sections/HeroSection';
+import { CompanyInfoSection } from '../components/sections/CompanyInfoSection';
 import { CatalogAndServicesSection } from '../components/sections/CatalogAndServicesSection';
-import { AboutSection } from '../components/sections/AboutSection';
 import { NewsSection } from '../components/sections/NewsSection';
 import { PartnersSection } from '../components/sections/PartnersSection';
 import { TeamSection } from '../components/sections/TeamSection';
@@ -11,9 +11,9 @@ export function HomePage() {
   return (
     <>
       <HeroSection />
+      <CompanyInfoSection />
       <CatalogAndServicesSection />
       <NewsSection />
-      <AboutSection />
       <PartnersSection />
       <TeamSection />
       <ContactFormSection />

@@ -185,6 +185,17 @@ model Gallery {
   updatedAt   DateTime @updatedAt
 }
 
+model HeroSlide {
+  id          String   @id @default(cuid())
+  image       String
+  title       String
+  titleEn     String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Page {
   id            String   @id @default(cuid())
   slug          String   @unique
@@ -205,6 +216,9 @@ model ContactInfo {
   mapLng          Float
   workingHours    String?
   workingHoursEn  String?
+  facebook        String?
+  instagram       String?
+  telegram        String?
   requisites      Json?    // { companyName, inn, kpp, bankName, bankAccount }
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

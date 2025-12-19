@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Send } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -8,6 +8,12 @@ import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { useSubmitContactMutation } from '../../shared/services/contact.service';
 import { toast } from 'sonner';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface ContactFormProps {
   contextType?: 'product' | 'service' | 'general';
@@ -24,6 +30,57 @@ export function ContactFormSection({ contextType, contextId, contextTitle }: Con
     email: '',
     message: '',
   });
+  const sectionRef = useRef<HTMLElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
+  const rightRef = useRef<HTMLDivElement>(null);
+
+  // GSAP анимации
+  useEffect(() => {
+    if (sectionRef.current && leftRef.current && rightRef.current) {
+      // Анимация левой части (форма)
+      gsap.fromTo(leftRef.current,
+        { opacity: 0, x: -50 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+            once: true,
+          },
+        }
+      );
+
+      // Анимация правой части (изображение)
+      gsap.fromTo(rightRef.current,
+        { opacity: 0, x: 50, scale: 0.95 },
+        {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+            once: true,
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === sectionRef.current) {
+          trigger.kill();
+        }
+      });
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,10 +105,10 @@ export function ContactFormSection({ contextType, contextId, contextTitle }: Con
   };
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
+    <section ref={sectionRef} className="py-12 md:py-16 lg:py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div>
+          <div ref={leftRef}>
             <h2 className="mb-3 md:mb-4">{t('contact.title')}</h2>
             <p className="text-muted-foreground mb-6 md:mb-8 text-sm md:text-base">
               {t('contact.subtitle')}
@@ -144,7 +201,7 @@ export function ContactFormSection({ contextType, contextId, contextTitle }: Con
             </form>
           </div>
 
-          <div className="relative">
+          <div ref={rightRef} className="relative">
             <div className="absolute -inset-4 rounded-3xl opacity-15" style={{ backgroundColor: BRAND.colors.accent }} />
             <ImageWithFallback
               src="https://images.unsplash.com/photo-1631557676757-fcc7b1160be8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpY2FsJTIwbGFib3JhdG9yeSUyMHJlc2VhcmNofGVufDF8fHx8MTc2NDU3NzMwNXww&ixlib=rb-4.1.0&q=80&w=1080"

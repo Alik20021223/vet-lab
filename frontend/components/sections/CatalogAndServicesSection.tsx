@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -12,11 +12,20 @@ import { useServices } from '../../shared/hooks/useServices';
 import { getLocalizedField } from '../../shared/utils/localization';
 import { resolveImageUrl } from '../../shared/utils/imageUrl';
 import { categoryImages } from '../../shared/constants/catalogCategories';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function CatalogAndServicesSection() {
   const { t, language } = useLanguage();
   const { services, isLoading: isLoadingServices } = useServices();
   const [showPagination, setShowPagination] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const swiperRef = useRef<HTMLDivElement>(null);
 
   // Категории каталога (только 4 категории для главной страницы)
   const catalogCategories = [
@@ -59,6 +68,58 @@ export function CatalogAndServicesSection() {
     return () => window.removeEventListener('resize', updateSlidesPerView);
   }, [allItems.length]);
 
+  // GSAP анимации
+  useEffect(() => {
+    if (sectionRef.current && titleRef.current && swiperRef.current && !isLoadingServices) {
+      // Анимация заголовка
+      gsap.fromTo(titleRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+            once: true,
+          },
+        }
+      );
+
+      // Анимация карточек с задержкой
+      const cards = swiperRef.current.querySelectorAll('.swiper-slide');
+      if (cards.length > 0) {
+        gsap.fromTo(cards,
+          { opacity: 0, y: 60, scale: 0.9 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            stagger: 0.15,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 75%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          }
+        );
+      }
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === sectionRef.current) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [isLoadingServices, allItems.length]);
+
   if (isLoadingServices && allItems.length === 0) {
     return null;
   }
@@ -68,16 +129,16 @@ export function CatalogAndServicesSection() {
   }
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-gray-50">
+    <section ref={sectionRef} className="py-12 md:py-16 lg:py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="mb-3 md:mb-4">{t('catalogAndServices.title') || 'Каталог и услуги'}</h2>
+          <h2 ref={titleRef} className="mb-3 md:mb-4">{t('catalogAndServices.title') || 'Каталог и услуги'}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base">
             {t('catalogAndServices.subtitle') || 'Изучите наш каталог продукции и услуги'}
           </p>
         </div>
 
-        <div className="relative">
+        <div ref={swiperRef} className="relative">
           <Swiper
             key={`catalog-services-${showPagination}-${allItems.length}`}
             modules={[Navigation, Pagination, Autoplay]}

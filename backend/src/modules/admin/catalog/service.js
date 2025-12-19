@@ -143,13 +143,27 @@ export async function update(id, data) {
     }
   }
 
-  return prisma.catalogItem.update({
+  // Удаляем undefined и null значения, но сохраняем пустые строки для очистки полей
+  const cleanData = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value !== undefined && value !== null) {
+      cleanData[key] = value;
+    }
+  }
+
+  console.log('💾 Saving to database:', JSON.stringify(cleanData, null, 2));
+
+  const result = await prisma.catalogItem.update({
     where: { id },
-    data,
+    data: cleanData,
     include: {
       brand: true,
     },
   });
+  
+  console.log('✅ Database updated successfully');
+  
+  return result;
 }
 
 export async function remove(id) {

@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select';
+import bckChkn from '../assets/bck_chkn.png';
 
 // Категории остаются как mock данные, но используют переводы
 
@@ -116,7 +117,7 @@ export function CatalogPage() {
         </div>
       </section>
 
-      <section className="py-8 bg-[rgb(255,255,255)]">
+      <section className="py-8 bg-white">
         <div className="container mx-auto px-4">
           <Breadcrumbs
             items={[
@@ -127,8 +128,41 @@ export function CatalogPage() {
         </div>
       </section>
 
-      <section className="py-12">
-        <div className="container mx-auto px-4">
+      <section className="py-12 relative">
+        {/* Fixed background with chickens - left side */}
+        <div 
+          className="absolute pointer-events-none z-0"
+          style={{
+            left: 0,
+            bottom: 0,
+            width: '400px',
+            height: '400px',
+            backgroundImage: `url(${bckChkn})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: 'contain',
+            opacity: 0.5,
+          }}
+        />
+        
+        {/* Fixed background with chickens - right side (mirrored and lower) */}
+        <div 
+          className="absolute pointer-events-none z-0"
+          style={{
+            right: 0,
+            bottom: '-50px',
+            width: '400px',
+            height: '400px',
+            backgroundImage: `url(${bckChkn})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: 'contain',
+            opacity: 0.5,
+            transform: 'scaleX(-1)',
+          }}
+        />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Sidebar Filters */}
             <aside className="lg:w-64 shrink-0 space-y-6">
@@ -279,7 +313,7 @@ export function CatalogPage() {
                   </div>
 
                   {catalogItems.length === 0 && (
-                    <div className="text-center py-16 bg-gray-50 rounded-xl">
+                    <div className="text-center py-16 bg-white rounded-xl">
                       <p className="text-muted-foreground text-lg mb-4">
                         {t('catalog.notFound')}
                       </p>

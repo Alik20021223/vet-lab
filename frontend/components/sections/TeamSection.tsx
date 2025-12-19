@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -8,6 +8,12 @@ import 'swiper/css/pagination';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { useTeam } from '../../shared/hooks/useTeam';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 // Default avatar if no photo is provided
 const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=400&h=400&fit=crop';
@@ -16,6 +22,9 @@ export function TeamSection() {
   const { team, isLoading } = useTeam();
   const { t, language } = useLanguage();
   const [showPagination, setShowPagination] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!team || team.length === 0) return;
@@ -34,22 +43,74 @@ export function TeamSection() {
     window.addEventListener('resize', updateSlidesPerView);
     return () => window.removeEventListener('resize', updateSlidesPerView);
   }, [team]);
+
+  // GSAP анимации
+  useEffect(() => {
+    if (sectionRef.current && titleRef.current && swiperRef.current && !isLoading && team && team.length > 0) {
+      // Анимация заголовка
+      gsap.fromTo(titleRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+            once: true,
+          },
+        }
+      );
+
+      // Анимация карточек команды
+      const cards = swiperRef.current.querySelectorAll('.swiper-slide');
+      if (cards.length > 0) {
+        gsap.fromTo(cards,
+          { opacity: 0, y: 60, rotationY: -15 },
+          {
+            opacity: 1,
+            y: 0,
+            rotationY: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            stagger: 0.15,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 75%',
+              toggleActions: 'play none none none',
+              once: true,
+            },
+          }
+        );
+      }
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === sectionRef.current) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [isLoading, team]);
   
   if (isLoading || !team || team.length === 0) {
     return null;
   }
 
   return (
-    <section className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div ref={titleRef} className="text-center mb-12">
           <h2 className="mb-4">{t('team.title')}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             {t('team.subtitle')}
           </p>
         </div>
 
-        <div className="relative">
+        <div ref={swiperRef} className="relative">
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={24}

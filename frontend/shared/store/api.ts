@@ -152,6 +152,7 @@ export const api = createApi({
           'Team',
           'Partner',
           'Gallery',
+          'HeroSlides',
           'Contacts',
           'Page',
           'Dashboard',

@@ -1,24 +1,101 @@
+import { useEffect, useRef } from 'react';
 import { MapPin } from 'lucide-react';
 import { BRAND } from '../../shared/constants/brand';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { useContacts } from '../../shared/hooks/useContacts';
 import { getLocalizedField } from '../../shared/utils/localization';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function MapSection() {
   const { t, language } = useLanguage();
   const { contacts } = useContacts();
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // GSAP анимации
+  useEffect(() => {
+    if (sectionRef.current && titleRef.current && mapRef.current && cardRef.current) {
+      // Анимация заголовка
+      gsap.fromTo(titleRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+            once: true,
+          },
+        }
+      );
+
+      // Анимация карты
+      gsap.fromTo(mapRef.current,
+        { opacity: 0, scale: 0.95, y: 30 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+            toggleActions: 'play none none none',
+            once: true,
+          },
+        }
+      );
+
+      // Анимация карточки с информацией
+      gsap.fromTo(cardRef.current,
+        { opacity: 0, x: -30, y: 30 },
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: 'back.out(1.7)',
+          scrollTrigger: {
+            trigger: mapRef.current,
+            start: 'top 70%',
+            toggleActions: 'play none none none',
+            once: true,
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === sectionRef.current || trigger.vars.trigger === mapRef.current) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [contacts]);
   
   return (
-    <section className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div ref={titleRef} className="text-center mb-12">
           <h2 className="mb-4">{t('map.title')}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             {t('map.subtitle')}
           </p>
         </div>
 
-        <div className="relative rounded-2xl overflow-hidden shadow-xl h-[500px] bg-gray-100">
+        <div ref={mapRef} className="relative rounded-2xl overflow-hidden shadow-xl h-[500px] bg-gray-100">
           {contacts?.mapLat && contacts?.mapLng ? (
             <iframe
               src={`https://www.google.com/maps?q=${contacts.mapLat},${contacts.mapLng}&hl=${language}&z=15&output=embed`}
@@ -43,7 +120,7 @@ export function MapSection() {
             />
           )}
           
-          <div className="absolute bottom-6 left-6 bg-white rounded-xl p-6 shadow-lg max-w-sm">
+          <div ref={cardRef} className="absolute bottom-6 left-6 bg-white rounded-xl p-6 shadow-lg max-w-sm">
             <div className="flex items-start gap-3">
               <div
                 className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"

@@ -38,6 +38,9 @@ export function ContactsAdminPage() {
     mapLng: 0,
     workingHours: '',
     workingHoursEn: '',
+    facebook: '',
+    instagram: '',
+    telegram: '',
   });
 
   useEffect(() => {
@@ -51,6 +54,9 @@ export function ContactsAdminPage() {
         mapLng: contacts.mapLng || 0,
         workingHours: contacts.workingHours || '',
         workingHoursEn: contacts.workingHoursEn || '',
+        facebook: contacts.facebook || '',
+        instagram: contacts.instagram || '',
+        telegram: contacts.telegram || '',
       });
     }
   }, [contacts]);
@@ -145,6 +151,45 @@ export function ContactsAdminPage() {
               className="mt-2.5"
             />
           </div>
+        </Card>
+
+        <Card className="p-6">
+          <h3 className="mb-4">Социальные сети</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Label>Telegram</Label>
+              <Input
+                type="url"
+                value={formData.telegram || ''}
+                onChange={(e) => setFormData({ ...formData, telegram: e.target.value })}
+                placeholder="https://t.me/vetlab"
+                className="mt-2.5"
+              />
+            </div>
+            <div>
+              <Label>Facebook</Label>
+              <Input
+                type="url"
+                value={formData.facebook || ''}
+                onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
+                placeholder="https://facebook.com/vetlab"
+                className="mt-2.5"
+              />
+            </div>
+            <div>
+              <Label>Instagram</Label>
+              <Input
+                type="url"
+                value={formData.instagram || ''}
+                onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+                placeholder="https://instagram.com/vetlab"
+                className="mt-2.5"
+              />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Введите полные URL-адреса ваших страниц в социальных сетях
+          </p>
         </Card>
 
         <Card className="p-6">

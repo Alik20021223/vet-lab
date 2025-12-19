@@ -62,7 +62,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="py-4 bg-gray-50">
+      <section className="py-4 bg-white">
         <div className="container mx-auto px-4">
           <Breadcrumbs items={[{ label: t('nav.about') }]} />
         </div>
@@ -123,7 +123,7 @@ export function AboutPage() {
       </section>
 
       {/* Партнеры - Brands Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="mb-4">Мы являемся представителями ведущих мировых брендов</h2>
@@ -194,7 +194,7 @@ export function AboutPage() {
       </section>
 
       {/* Статистика и преимущества */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="text-center lg:text-left">

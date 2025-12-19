@@ -54,8 +54,14 @@ export async function update(request, reply) {
     // Используем JSON body, файлы загружаются отдельно через /api/upload
     const data = request.body;
     
+    // Логирование для отладки
+    console.log('📝 Update catalog item:', id);
+    console.log('📦 Received data:', JSON.stringify(data, null, 2));
+    
     const item = await catalogService.update(id, data);
     if (!item) return error(reply, 'Товар не найден', 404);
+    
+    console.log('✅ Updated item:', JSON.stringify(item, null, 2));
     
     // Форматируем ответ согласно документации
     const formattedItem = {

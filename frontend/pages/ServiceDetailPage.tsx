@@ -85,7 +85,7 @@ export function ServiceDetailPage() {
         </div>
       </section>
 
-      <section className="py-4 bg-gray-50">
+      <section className="py-4 bg-white">
         <div className="container mx-auto px-4">
           <Breadcrumbs
             items={[

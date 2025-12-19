@@ -5,6 +5,7 @@ export * from './useAdminServices';
 export * from './useAdminTeam';
 export * from './useAdminPartners';
 export * from './useAdminGallery';
+export * from './useAdminHeroSlides';
 export * from './useAdminContacts';
 export * from './useAdminCatalog';
 export * from './useAdminPages';

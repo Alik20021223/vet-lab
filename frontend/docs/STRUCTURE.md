@@ -25,7 +25,6 @@
   - `Layout.tsx` - Основной layout
 
 - **`/sections`** - Секции страниц
-  - `AboutSection.tsx` - Секция "О нас"
   - `CatalogAndServicesSection.tsx` - Каталог и услуги
   - `ContactFormSection.tsx` - Форма контактов
   - `HeroSection.tsx` - Главная секция

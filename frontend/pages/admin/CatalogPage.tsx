@@ -69,7 +69,7 @@ export function CatalogPage() {
   });
 
   // Загружаем данные из API
-  const { catalog } = useAdminCatalog();
+  const { catalog, refetch } = useAdminCatalog();
   const { createCatalogItem, updateCatalogItem, deleteCatalogItem, isCreating, isUpdating } = useCatalogMutations();
   const { brands, isLoading: isLoadingBrands } = useBrands();
 
@@ -119,6 +119,7 @@ export function CatalogPage() {
 
   const handleSave = async () => {
     try {
+      // Создаем payload со всеми полями, включая пустые строки для очистки полей в БД
       const payload: {
         title: string;
         titleEn?: string;
@@ -139,30 +140,18 @@ export function CatalogPage() {
         status: formData.status,
       };
 
-      if (formData.titleEn) {
-        payload.titleEn = formData.titleEn;
-      }
-      if (formData.descriptionEn) {
-        payload.descriptionEn = formData.descriptionEn;
-      }
-      if (formData.fullDescription) {
-        payload.fullDescription = formData.fullDescription;
-      }
-      if (formData.fullDescriptionEn) {
-        payload.fullDescriptionEn = formData.fullDescriptionEn;
-      }
-      if (formData.applicationMethod) {
-        payload.applicationMethod = formData.applicationMethod;
-      }
-      if (formData.applicationMethodEn) {
-        payload.applicationMethodEn = formData.applicationMethodEn;
-      }
-      if (formData.brandId) {
-        payload.brandId = formData.brandId;
-      }
-      if (formData.image) {
-        payload.image = formData.image;
-      }
+      // Передаем все поля, даже если они пустые (для очистки в БД)
+      payload.titleEn = formData.titleEn || undefined;
+      payload.descriptionEn = formData.descriptionEn || undefined;
+      payload.fullDescription = formData.fullDescription || undefined;
+      payload.fullDescriptionEn = formData.fullDescriptionEn || undefined;
+      payload.applicationMethod = formData.applicationMethod || undefined;
+      payload.applicationMethodEn = formData.applicationMethodEn || undefined;
+      payload.brandId = formData.brandId || undefined;
+      payload.image = formData.image || undefined;
+      
+      // Логирование для отладки
+      console.log('📤 Sending update payload:', payload);
 
       if (editingItem) {
         await updateCatalogItem({
@@ -170,9 +159,13 @@ export function CatalogPage() {
           ...payload,
         }).unwrap();
         toast.success('Товар успешно обновлен');
+        // Принудительно обновляем данные после обновления
+        await refetch();
       } else {
         await createCatalogItem(payload).unwrap();
         toast.success('Товар успешно создан');
+        // Принудительно обновляем данные после создания
+        await refetch();
       }
       setActiveCategory(payload.category as keyof typeof CATALOG_CATEGORIES);
       setIsModalOpen(false);

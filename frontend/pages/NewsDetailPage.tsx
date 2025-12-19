@@ -62,7 +62,7 @@ export function NewsDetailPage() {
 
   return (
     <>
-      <section className="py-8 bg-gray-50">
+      <section className="py-8 bg-white">
         <div className="container mx-auto px-4">
           <Breadcrumbs
             items={[

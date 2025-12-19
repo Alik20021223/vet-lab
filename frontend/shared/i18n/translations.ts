@@ -35,19 +35,13 @@ export const translations = {
     'catalog.application': 'Способ применения',
     
     // Hero Section
-    'hero.title': 'VET-LAB — ведущий поставщик ветеринарных решений и инновационная лаборатория',
-    'hero.subtitle': 'Обеспечивая качество и безопасность в птицеводстве и животноводстве Центральной Азии',
+    'hero.title': 'VET-LAB',
+    'hero.subtitle': 'ЗДОРОВЬЕ ПТИЦЫ - НАША РАБОТА',
     'hero.services': 'Услуги',
     'hero.contact': 'Связаться',
     
-    // About Section
-    'about.title': 'О VET-LAB',
-    'about.text1': 'VET-LAB является ведущим поставщиком ветеринарных решений в Центральной Азии. Мы специализируемся на лабораторной диагностике, поставке качественных ветеринарных препаратов и профессиональном сопровождении предприятий птицеводства и животноводства.',
-    'about.text2': 'Наша миссия — обеспечить высочайший уровень ветеринарного обслуживания, внедряя инновационные технологии и международные стандарты качества в практику работы наших клиентов.',
-    'about.benefit1': 'Современное оборудование европейского класса',
-    'about.benefit2': 'Опытная команда сертифицированных специалистов',
-    'about.benefit3': 'Быстрая и точная диагностика',
-    'about.benefit4': 'Индивидуальный подход к каждому клиенту',
+    // Company Info Section
+    'companyInfo.description': 'Крупнейший поставщик кормов, кормовых добавок, премиксов, вакцин и ветеринарных препаратов для всех видов сельскохозяйственных животных и птиц в Центральной Азии',
     
     // Services Section
     'services.title': 'Наши услуги',
@@ -181,7 +175,11 @@ export const translations = {
     
     // Career Page
     'career.loading': 'Загрузка вакансий...',
-    'career.whyUsTitle': 'Почему VET-LAB?',
+    'career.whyUsTitle': 'Вместе создаём здоровое будущее!',
+    'career.whyUsText1': 'Присоединяйтесь к команде Vet-Lab — современного лабораторного центра и надёжного партнёра в сфере птицеводства и ветеринарной диагностики.',
+    'career.whyUsText2': 'Мы — часть ООО «Парандалпарварии Хужанд», предприятия с более чем 60-летней историей, и продолжаем развиваться, внедряя передовые технологии, научный подход и международные стандарты качества.',
+    'career.whyUsText3': 'В Vet-Lab мы ценим профессионализм, инициативу и стремление к развитию. Наша команда объединяет специалистов с международным опытом, готовых делиться знаниями и расти вместе с компанией.',
+    'career.whyUsText4': 'Если вы хотите работать в динамичной среде, где ценятся ответственность, точность и желание приносить пользу — добро пожаловать в Vet-Lab!',
     'career.benefit1': 'Конкурентная заработная плата',
     'career.benefit2': 'Профессиональное развитие и обучение',
     'career.benefit3': 'Современное оборудование и технологии',
@@ -248,6 +246,7 @@ export const translations = {
     'admin.team': 'Команда',
     'admin.partners': 'Партнёры',
     'admin.gallery': 'Галерея',
+    'admin.heroSlides': 'Hero слайды',
     'admin.careers': 'Вакансии',
     'admin.contacts': 'Контакты',
     'admin.pages': 'Страницы',
@@ -305,19 +304,13 @@ export const translations = {
     'catalog.application': 'Application Method',
     
     // Hero Section
-    'hero.title': 'VET-LAB — Leading Provider of Veterinary Solutions and Innovative Laboratory',
-    'hero.subtitle': 'Ensuring quality and safety in poultry and livestock farming across Central Asia',
+    'hero.title': 'VET-LAB',
+    'hero.subtitle': 'BIRD HEALTH - OUR WORK',
     'hero.services': 'Services',
     'hero.contact': 'Contact Us',
     
-    // About Section
-    'about.title': 'About VET-LAB',
-    'about.text1': 'VET-LAB is a leading provider of veterinary solutions in Central Asia. We specialize in laboratory diagnostics, supply of quality veterinary medicines and professional support for poultry and livestock enterprises.',
-    'about.text2': 'Our mission is to provide the highest level of veterinary service by implementing innovative technologies and international quality standards in our clients\' work practices.',
-    'about.benefit1': 'Modern European-class equipment',
-    'about.benefit2': 'Experienced team of certified specialists',
-    'about.benefit3': 'Fast and accurate diagnostics',
-    'about.benefit4': 'Individual approach to each client',
+    // Company Info Section
+    'companyInfo.description': 'Largest supplier of feed, feed additives, premixes, vaccines and veterinary drugs for all types of farm animals and poultry in Central Asia',
     
     // Services Section
     'services.title': 'Our Services',
@@ -451,7 +444,11 @@ export const translations = {
     
     // Career Page
     'career.loading': 'Loading vacancies...',
-    'career.whyUsTitle': 'Why VET-LAB?',
+    'career.whyUsTitle': 'Building a Healthy Future Together!',
+    'career.whyUsText1': 'Join the Vet-Lab team — a modern laboratory center and reliable partner in poultry farming and veterinary diagnostics.',
+    'career.whyUsText2': 'We are part of LLC "Parandandparvarii Khujand", an enterprise with more than 60 years of history, and we continue to develop, implementing advanced technologies, scientific approach and international quality standards.',
+    'career.whyUsText3': 'At Vet-Lab, we value professionalism, initiative and the desire to develop. Our team brings together specialists with international experience, ready to share knowledge and grow together with the company.',
+    'career.whyUsText4': 'If you want to work in a dynamic environment where responsibility, accuracy and the desire to make a difference are valued — welcome to Vet-Lab!',
     'career.benefit1': 'Competitive salary',
     'career.benefit2': 'Professional development and training',
     'career.benefit3': 'Modern equipment and technologies',
@@ -518,6 +515,7 @@ export const translations = {
     'admin.team': 'Team',
     'admin.partners': 'Partners',
     'admin.gallery': 'Gallery',
+    'admin.heroSlides': 'Hero Slides',
     'admin.careers': 'Careers',
     'admin.contacts': 'Contacts',
     'admin.pages': 'Pages',

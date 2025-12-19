@@ -26,6 +26,7 @@ import { NewsAdminPage } from './pages/admin/NewsAdminPage';
 import { TeamAdminPage } from './pages/admin/TeamAdminPage';
 import { PartnersAdminPage } from './pages/admin/PartnersAdminPage';
 import { GalleryAdminPage } from './pages/admin/GalleryAdminPage';
+import { HeroSlidesAdminPage } from './pages/admin/HeroSlidesAdminPage';
 import { ContactsAdminPage } from './pages/admin/ContactsAdminPage';
 import { CareersAdminPage } from './pages/admin/CareersAdminPage';
 import { ProtectedRoute } from './components/admin/ProtectedRoute';
@@ -113,6 +114,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <GalleryAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/hero-slides"
+          element={
+            <ProtectedRoute>
+              <HeroSlidesAdminPage />
             </ProtectedRoute>
           }
         />

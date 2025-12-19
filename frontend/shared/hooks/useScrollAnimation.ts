@@ -1,85 +1,173 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-interface UseScrollAnimationOptions {
-  threshold?: number;
-  rootMargin?: string;
-  triggerOnce?: boolean;
+// Регистрируем плагин ScrollTrigger
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
 }
 
-export function useScrollAnimation(options: UseScrollAnimationOptions = {}) {
-  const {
-    threshold = 0.1,
-    rootMargin = '0px 0px -100px 0px',
-    triggerOnce = true,
-  } = options;
+interface ScrollAnimationOptions {
+  trigger?: string | Element | null;
+  start?: string;
+  end?: string;
+  toggleActions?: string;
+  once?: boolean;
+  delay?: number;
+  duration?: number;
+  ease?: string;
+  y?: number;
+  x?: number;
+  opacity?: number;
+  scale?: number;
+  rotation?: number;
+  stagger?: number;
+}
 
-  const elementRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+export function useScrollAnimation(
+  options: ScrollAnimationOptions = {}
+) {
+  const elementRef = useRef<HTMLElement | null>(null);
+  const animationRef = useRef<gsap.core.Tween | null>(null);
+
+  const {
+    trigger,
+    start = 'top 80%',
+    end = 'bottom 20%',
+    toggleActions = 'play none none none',
+    once = true,
+    delay = 0,
+    duration = 1,
+    ease = 'power3.out',
+    y = 50,
+    x = 0,
+    opacity = 0,
+    scale = 1,
+    rotation = 0,
+    stagger = 0,
+  } = options;
 
   useEffect(() => {
     const element = elementRef.current;
     if (!element) return;
 
-    // Проверяем начальное состояние элемента при монтировании
-    const checkInitialVisibility = () => {
-      const rect = element.getBoundingClientRect();
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      
-      // Проверяем, виден ли элемент в viewport
-      const isInViewport = rect.top < windowHeight && rect.bottom > 0;
-      
-      if (isInViewport) {
-        // Проверяем, достаточно ли видна часть элемента (по threshold)
-        const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
-        const visibleRatio = rect.height > 0 ? visibleHeight / rect.height : 0;
-        
-        if (visibleRatio >= threshold) {
-          setIsVisible(true);
-          return true; // Элемент уже виден
-        }
-      }
-      return false; // Элемент не виден или недостаточно виден
-    };
+    // Устанавливаем начальное состояние
+    gsap.set(element, {
+      opacity: opacity,
+      y: y,
+      x: x,
+      scale: scale,
+      rotation: rotation,
+    });
 
-    // Небольшая задержка для проверки начального состояния после рендера
-    const timeoutId = setTimeout(() => {
-      const alreadyVisible = checkInitialVisibility();
-      
-      // Если элемент уже виден и triggerOnce=true, не создаем observer
-      if (alreadyVisible && triggerOnce) {
-        return;
-      }
+    // Создаем анимацию
+    const animation = gsap.to(element, {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      rotation: 0,
+      duration: duration,
+      delay: delay,
+      ease: ease,
+      scrollTrigger: {
+        trigger: trigger || element,
+        start: start,
+        end: end,
+        toggleActions: toggleActions,
+        once: once,
+        markers: false, // Установите true для отладки
+      },
+    });
 
-      // Создаем observer для отслеживания появления элемента
-      observerRef.current = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            if (triggerOnce && observerRef.current) {
-              observerRef.current.unobserve(element);
-            }
-          } else if (!triggerOnce) {
-            setIsVisible(false);
-          }
-        },
-        {
-          threshold,
-          rootMargin,
-        }
-      );
-
-      observerRef.current.observe(element);
-    }, 100); // Небольшая задержка для корректной проверки
+    animationRef.current = animation;
 
     return () => {
-      clearTimeout(timeoutId);
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-      }
+      animation.kill();
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === (trigger || element)) {
+          trigger.kill();
+        }
+      });
     };
-  }, [threshold, rootMargin, triggerOnce]);
+  }, [trigger, start, end, toggleActions, once, delay, duration, ease, y, x, opacity, scale, rotation]);
 
-  return { elementRef, isVisible };
+  return elementRef;
+}
+
+// Хук для анимации нескольких элементов с задержкой (stagger)
+export function useStaggerScrollAnimation(
+  selector: string,
+  options: ScrollAnimationOptions = {}
+) {
+  const containerRef = useRef<HTMLElement | null>(null);
+  const animationRef = useRef<gsap.core.Timeline | null>(null);
+
+  const {
+    trigger,
+    start = 'top 80%',
+    end = 'bottom 20%',
+    toggleActions = 'play none none none',
+    once = true,
+    delay = 0,
+    duration = 0.8,
+    ease = 'power3.out',
+    y = 50,
+    x = 0,
+    opacity = 0,
+    scale = 1,
+    stagger = 0.1,
+  } = options;
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const elements = container.querySelectorAll(selector);
+    if (elements.length === 0) return;
+
+    // Устанавливаем начальное состояние для всех элементов
+    gsap.set(elements, {
+      opacity: opacity,
+      y: y,
+      x: x,
+      scale: scale,
+    });
+
+    // Создаем анимацию с stagger эффектом
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: trigger || container,
+        start: start,
+        end: end,
+        toggleActions: toggleActions,
+        once: once,
+        markers: false,
+      },
+    });
+
+    timeline.to(elements, {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      duration: duration,
+      delay: delay,
+      ease: ease,
+      stagger: stagger,
+    });
+
+    animationRef.current = timeline;
+
+    return () => {
+      timeline.kill();
+      ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.vars.trigger === (trigger || container)) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [selector, trigger, start, end, toggleActions, once, delay, duration, ease, y, x, opacity, scale, stagger]);
+
+  return containerRef;
 }

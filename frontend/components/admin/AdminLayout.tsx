@@ -38,6 +38,7 @@ const ADMIN_NAVIGATION = [
   { labelKey: 'admin.team', icon: Users, href: '/admin/team' },
   { labelKey: 'admin.partners', icon: Handshake, href: '/admin/partners' },
   { labelKey: 'admin.gallery', icon: ImageIcon, href: '/admin/gallery' },
+  { labelKey: 'admin.heroSlides', icon: ImageIcon, href: '/admin/hero-slides' },
   { labelKey: 'admin.careers', icon: Briefcase, href: '/admin/careers' },
   { labelKey: 'admin.contacts', icon: Phone, href: '/admin/contacts' },
   { labelKey: 'admin.settings', icon: Settings, href: '/admin/settings' },

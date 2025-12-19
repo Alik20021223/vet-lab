@@ -68,6 +68,15 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => `/admin/gallery/${id}`,
   },
 
+  // HERO SLIDES
+  HERO_SLIDES: {
+    LIST: '/admin/hero-slides',
+    CREATE: '/admin/hero-slides',
+    GET: (id: string) => `/admin/hero-slides/${id}`,
+    UPDATE: (id: string) => `/admin/hero-slides/${id}`,
+    DELETE: (id: string) => `/admin/hero-slides/${id}`,
+  },
+
   // CONTACTS
   CONTACTS: {
     GET: '/admin/contacts',
