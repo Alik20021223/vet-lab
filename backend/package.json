@@ -17,7 +17,8 @@
     "translate:news": "node scripts/translate-news.js",
     "translate:careers": "node scripts/translate-careers.js",
     "translate:contacts": "node scripts/translate-contacts.js",
-    "translate:all": "node scripts/translate-services.js && node scripts/translate-catalog.js && node scripts/translate-team.js && node scripts/translate-news.js && node scripts/translate-careers.js && node scripts/translate-contacts.js"
+    "translate:all": "node scripts/translate-services.js && node scripts/translate-catalog.js && node scripts/translate-team.js && node scripts/translate-news.js && node scripts/translate-careers.js && node scripts/translate-contacts.js",
+    "add-test-news": "node scripts/add-test-news.js"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",

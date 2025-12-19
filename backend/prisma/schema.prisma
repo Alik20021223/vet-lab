@@ -163,9 +163,21 @@ model Partner {
   updatedAt DateTime @updatedAt
 }
 
+model GallerySection {
+  id          String   @id @default(cuid())
+  title       String
+  titleEn     String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  items       Gallery[]
+}
+
 model Gallery {
   id          String   @id @default(cuid())
   image       String
+  sectionId   String?
+  section     GallerySection? @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   category    String?
   description String?
   sortOrder   Int      @default(0)
