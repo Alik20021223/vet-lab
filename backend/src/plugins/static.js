@@ -39,6 +39,10 @@ export default fp(async function (fastify, opts) {
         '.webp': 'image/webp',
       }[ext] || 'application/octet-stream';
       
+      // Добавляем CORS заголовки для статических файлов
+      reply.header('Access-Control-Allow-Origin', '*');
+      reply.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+      reply.header('Access-Control-Allow-Headers', 'Content-Type');
       reply.type(contentType);
       return reply.send(file);
     } catch (err) {
@@ -77,6 +81,10 @@ export default fp(async function (fastify, opts) {
         '.webp': 'image/webp',
       }[ext] || 'application/octet-stream';
       
+      // Добавляем CORS заголовки для статических файлов
+      reply.header('Access-Control-Allow-Origin', '*');
+      reply.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+      reply.header('Access-Control-Allow-Headers', 'Content-Type');
       reply.type(contentType);
       return reply.send(file);
     } catch (err) {
@@ -88,6 +96,12 @@ export default fp(async function (fastify, opts) {
   await fastify.register(staticFiles, {
     root: path.join(__dirname, '../../uploads'),
     prefix: '/static/',
+    setHeaders: (res, pathName) => {
+      // Добавляем CORS заголовки для всех статических файлов
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    },
   });
 });
 
