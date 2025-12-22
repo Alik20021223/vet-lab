@@ -24,7 +24,6 @@ enum CatalogCategory {
   disinfection
   feed_additives
   equipment
-  antibiotics
 }
 
 enum CatalogStatus {

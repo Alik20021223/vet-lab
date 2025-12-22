@@ -104,7 +104,6 @@ export async function create(data) {
     'disinfection': 'disinfection',
     'feed-additives': 'feed_additives',
     'equipment': 'equipment',
-    'antibiotics': 'antibiotics',
   };
   
   if (data.category && categoryMap[data.category]) {

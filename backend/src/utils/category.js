@@ -3,9 +3,6 @@ export function formatCategory(category) {
   if (category === 'feed_additives') {
     return 'feed-additives';
   }
-  if (category === 'antibiotics') {
-    return 'antibiotics';
-  }
   return category;
 }
 
@@ -13,9 +10,6 @@ export function formatCategory(category) {
 export function parseCategory(category) {
   if (category === 'feed-additives') {
     return 'feed_additives';
-  }
-  if (category === 'antibiotics') {
-    return 'antibiotics';
   }
   return category;
 }
