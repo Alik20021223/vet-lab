@@ -51,7 +51,7 @@ export async function update(request, reply) {
     }
     
     // Convert empty strings to null for optional fields
-    const optionalFields = ['addressEn', 'workingHours', 'workingHoursEn'];
+    const optionalFields = ['addressEn', 'workingHours', 'workingHoursEn', 'facebook', 'instagram', 'telegram'];
     optionalFields.forEach(field => {
       if (data[field] === '') {
         data[field] = null;

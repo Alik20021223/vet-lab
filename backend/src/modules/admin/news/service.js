@@ -3,6 +3,27 @@ import { deleteFile } from '../../../utils/file.js';
 import { resolveImageUrlsInData } from '../../../utils/url.js';
 const prisma = new PrismaClient();
 
+// Функция для преобразования дат в строки
+function serializeDates(news) {
+  if (Array.isArray(news)) {
+    return news.map(item => serializeDates(item));
+  }
+  if (news && typeof news === 'object') {
+    const serialized = { ...news };
+    if (serialized.publishedAt instanceof Date) {
+      serialized.publishedAt = serialized.publishedAt.toISOString().split('T')[0];
+    }
+    if (serialized.createdAt instanceof Date) {
+      serialized.createdAt = serialized.createdAt.toISOString();
+    }
+    if (serialized.updatedAt instanceof Date) {
+      serialized.updatedAt = serialized.updatedAt.toISOString();
+    }
+    return serialized;
+  }
+  return news;
+}
+
 export async function getAll(skip, limit, filters = {}) {
   const where = {
     ...(filters.status && { status: filters.status }),
@@ -25,7 +46,8 @@ export async function getAll(skip, limit, filters = {}) {
     }),
     prisma.news.count({ where }),
   ]);
-  return resolveImageUrlsInData({ data, total });
+  const serializedData = serializeDates(data);
+  return resolveImageUrlsInData({ data: serializedData, total });
 }
 
 export async function getById(id) {
@@ -36,16 +58,21 @@ export async function getById(id) {
     },
   });
   
-  return resolveImageUrlsInData(news);
+  if (!news) return null;
+  
+  const serializedNews = serializeDates(news);
+  return resolveImageUrlsInData(serializedNews);
 }
 
 export async function create(data) {
-  return prisma.news.create({
+  const news = await prisma.news.create({
     data,
     include: {
       author: { select: { id: true, name: true } },
     },
   });
+  const serializedNews = serializeDates(news);
+  return resolveImageUrlsInData(serializedNews);
 }
 
 export async function update(id, data) {
@@ -55,13 +82,15 @@ export async function update(id, data) {
     await deleteFile(oldNews.coverImage);
   }
   
-  return prisma.news.update({
+  const news = await prisma.news.update({
     where: { id },
     data,
     include: {
       author: { select: { id: true, name: true } },
     },
   });
+  const serializedNews = serializeDates(news);
+  return resolveImageUrlsInData(serializedNews);
 }
 
 export async function remove(id) {

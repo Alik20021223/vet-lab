@@ -29,17 +29,42 @@ export async function create(request, reply) {
   try {
     const rawData = await parseRequestData(request);
     const data = { ...rawData };
+    
     if (rawData.image && rawData.image.file) {
       const result = await saveImage(rawData.image, 'gallery');
       data.image = result.url; // Используем WebP версию
     }
+    
     if (!data.image) {
       return error(reply, 'Изображение обязательно', 400);
     }
-    const item = await service.create(data);
+    
+    // Валидация и нормализация данных
+    const itemData = {
+      image: data.image,
+      sectionId: data.sectionId || null,
+      category: data.category?.trim() || null,
+      description: data.description?.trim() || null,
+      sortOrder: data.sortOrder ? parseInt(data.sortOrder, 10) : 0,
+    };
+    
+    // Если sectionId указан, проверяем что секция существует
+    if (itemData.sectionId) {
+      const { PrismaClient } = await import('@prisma/client');
+      const prisma = new PrismaClient();
+      const section = await prisma.gallerySection.findUnique({
+        where: { id: itemData.sectionId },
+      });
+      if (!section) {
+        return error(reply, 'Секция не найдена', 400);
+      }
+    }
+    
+    const item = await service.create(itemData);
     return success(reply, item, 201);
   } catch (err) {
-    return error(reply, err.message, 500);
+    console.error('Error creating gallery item:', err);
+    return error(reply, err.message || 'Ошибка при создании изображения', 500);
   }
 }
 

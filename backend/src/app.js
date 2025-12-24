@@ -15,6 +15,7 @@ import publicGalleryRoutes from './api-public/gallery.js';
 import publicContactRoutes from './api-public/contacts.js';
 import publicPageRoutes from './api-public/pages.js';
 import publicCareerRoutes from './api-public/careers.js';
+import publicHeroSlidesRoutes from './api-public/hero-slides.js';
 
 // Auth routes
 import authRoutes from './modules/auth/routes.js';
@@ -32,6 +33,7 @@ import adminPageRoutes from './modules/admin/pages/routes.js';
 import adminDashboardRoutes from './modules/admin/dashboard/routes.js';
 import adminUploadRoutes from './modules/admin/upload/routes.js';
 import adminCareerRoutes from './modules/admin/careers/routes.js';
+import adminHeroSlidesRoutes from './modules/admin/hero-slides/routes.js';
 
 export default async function buildApp() {
   const app = Fastify({
@@ -60,6 +62,7 @@ export default async function buildApp() {
   await app.register(publicContactRoutes, { prefix: '/api/contacts' });
   await app.register(publicPageRoutes, { prefix: '/api/pages' });
   await app.register(publicCareerRoutes, { prefix: '/api/careers' });
+  await app.register(publicHeroSlidesRoutes, { prefix: '/api/hero-slides' });
 
   // Auth routes
   await app.register(authRoutes, { prefix: '/api/auth' });
@@ -76,6 +79,7 @@ export default async function buildApp() {
   await app.register(adminContactRoutes, { prefix: '/api/admin/contacts' });
   await app.register(adminPageRoutes, { prefix: '/api/admin/pages' });
   await app.register(adminCareerRoutes, { prefix: '/api/admin/careers' });
+  await app.register(adminHeroSlidesRoutes, { prefix: '/api/admin/hero-slides' });
   await app.register(adminUploadRoutes, { prefix: '/api/upload' });
 
   return app;

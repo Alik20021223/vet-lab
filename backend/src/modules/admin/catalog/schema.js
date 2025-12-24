@@ -13,7 +13,7 @@ export const createSchema = {
       applicationMethodEn: { type: 'string' },
       category: { 
         type: 'string',
-        enum: ['vaccines', 'medicines', 'disinfection', 'feed-additives', 'equipment', 'antibiotics']
+        enum: ['vaccines', 'medicines', 'disinfection', 'feed-additives', 'equipment']
       },
       brandId: { type: 'string' },
       image: { type: 'string' },
@@ -41,7 +41,7 @@ export const updateSchema = {
       applicationMethodEn: { type: 'string' },
       category: { 
         type: 'string',
-        enum: ['vaccines', 'medicines', 'disinfection', 'feed-additives', 'equipment', 'antibiotics']
+        enum: ['vaccines', 'medicines', 'disinfection', 'feed-additives', 'equipment']
       },
       brandId: { type: 'string' },
       image: { type: 'string' },

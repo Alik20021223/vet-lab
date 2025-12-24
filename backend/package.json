@@ -17,7 +17,8 @@
     "translate:news": "node scripts/translate-news.js",
     "translate:careers": "node scripts/translate-careers.js",
     "translate:contacts": "node scripts/translate-contacts.js",
-    "translate:all": "node scripts/translate-services.js && node scripts/translate-catalog.js && node scripts/translate-team.js && node scripts/translate-news.js && node scripts/translate-careers.js && node scripts/translate-contacts.js"
+    "translate:all": "node scripts/translate-services.js && node scripts/translate-catalog.js && node scripts/translate-team.js && node scripts/translate-news.js && node scripts/translate-careers.js && node scripts/translate-contacts.js",
+    "add-test-news": "node scripts/add-test-news.js"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
@@ -29,10 +30,11 @@
     "fastify": "^4.24.3",
     "fastify-plugin": "^4.5.1",
     "jsonwebtoken": "^9.0.2",
+    "node-telegram-bot-api": "^0.67.0",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "prisma": "^5.7.1",
-    "node-gyp": "^10.0.0"
+    "node-gyp": "^10.0.0",
+    "prisma": "^5.7.1"
   }
 }

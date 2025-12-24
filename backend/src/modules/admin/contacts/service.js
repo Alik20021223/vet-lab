@@ -16,7 +16,7 @@ export async function update(data) {
   
   // Filter out undefined and null values for optional fields, but keep required fields
   const updateData = {};
-  const allowedFields = ['phone', 'email', 'address', 'addressEn', 'mapLat', 'mapLng', 'workingHours', 'workingHoursEn'];
+  const allowedFields = ['phone', 'email', 'address', 'addressEn', 'mapLat', 'mapLng', 'workingHours', 'workingHoursEn', 'facebook', 'instagram', 'telegram'];
   
   allowedFields.forEach(field => {
     if (data[field] !== undefined) {

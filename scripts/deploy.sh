@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 # VetLab Production Deployment Script
 # This script automates the deployment process
